@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildBinPath)\Microsoft.Common.targets" />
+  <PropertyGroup>
+    <GetProjectVersionTool>$(ProjectDir)..\..\UtilityModule\TMReport.ResourceEx\tools\GetProjectVersion</GetProjectVersionTool>
+    <VersionOutputFile>$(ProjectDir)\version.txt</VersionOutputFile>
+    <GetProjectVersionCmd>"$(GetProjectVersionTool)" -fullversion > "$(VersionOutputFile)"</GetProjectVersionCmd>
+  </PropertyGroup>
+  <PropertyGroup>
+    <HtmlHelpName>SHFB Manual</HtmlHelpName>
+    <HelpFileTitle>SHFB Manual</HelpFileTitle>
+    <Version>1.0.0.0</Version>
+    <OutputPath>.\Help\</OutputPath>
+  </PropertyGroup>
+  <Target Name="GetProjectVersion">
+    <Message Text="Enter GetProjectVersion Process" />
+    <Exec Command="$(GetProjectVersionCmd)" />
+  </Target>
+  <Target Name="Build_Old" DependsOnTargets="GetProjectVersion">
+    <Message Text="Enter TMCM SDK Manual Generator" />
+    <Message Text="Get Build Number" />
+    <ReadLinesFromFile File="$(VersionOutputFile)" >
+      <Output TaskParameter="Lines" PropertyName="Version"/>
+    </ReadLinesFromFile>
+    <Message Text="Generate TMCM SDK Manual $(Version)" />
+    <MSBuild ToolsVersion="4.0" Properties="HtmlHelpName=$(HtmlHelpName);HelpTitle=$(HelpFileTitle) $(Version);HelpFileVersion=$(Version);OutputPath=$(OutputPath);CleanIntermediates=True;Configuration=Release" Projects="TMCM SDK Manual.shfbproj" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="BuildNumberGenerator"/>
+    <CallTarget Targets="SHFBManualGenerator"/>
+  </Target>
+  <Target Name="BuildNumberGenerator">
+    <Message Text="Get Build Number" />
+    <ReadLinesFromFile File="$(VersionOutputFile)" >
+      <Output TaskParameter="Lines" PropertyName="Version"/>
+    </ReadLinesFromFile>
+    <Message Text="Build Number = $(Version)" />
+  </Target>
+  <Target Name="SHFBManualGenerator">
+    <Message Text="Generate SHFB Manual $(Version)" />
+    <MSBuild ToolsVersion="4.0" Properties="HtmlHelpName=$(HtmlHelpName);HelpTitle=$(HelpFileTitle) $(Version);HelpFileVersion=$(Version);OutputPath=$(OutputPath);CleanIntermediates=True;Configuration=Release" Projects="SHFB Manual.shfbproj" />
+  </Target>
+</Project>
