@@ -63,7 +63,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>XCOPY "$(OutputPath)$(HtmlHelpName).chm" "$(ProjectDir)BackupDoc\" /D/Y/I</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(OutputPath)$(HtmlHelpName).chm" "$(ProjectDir)Doc\" /D/Y/I</PostBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 </Project>
